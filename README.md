@@ -28,7 +28,6 @@ Para trabalhar com Scheme no Visual Studio Code, siga as instruções abaixo:
    - Clique em "Edit in settings.json" e adicione o seguinte trecho dentro de "code-runner.executorMapByFileExtension":
      ```json
      ".scm": "racket",
-     ".scheme": "racket"
      ```
 
 Agora, ao utilizar o VS Code para escrever código Scheme, o Code Runner estará configurado para executar corretamente os arquivos com extensão `.scm` e `.scheme`. Certifique-se de inserir o cabeçalho `#lang scheme` no início do seu código para indicar que está usando a linguagem Scheme.
