@@ -1,4 +1,20 @@
 # TrabalhoFuncionalScheme
+# Scheme: Uma Visão Geral
+
+## Origem da Linguagem Scheme
+- Scheme foi criada em 1975 por Gerald Jay Sussman e Guy L. Steele Jr.
+- Ela se originou a partir da linguagem Lisp.
+
+## Paradigmas de Programação
+- Scheme é uma linguagem multiparadigma que suporta programação funcional e procedural.
+
+## Objetivo de Design
+- O principal objetivo ao criar Scheme foi oferecer uma linguagem de programação simples e elegante, mantendo a potência do Lisp.
+
+## Ambiente de Desenvolvimento
+- O interpretador Racket é amplamente utilizado para desenvolver em Scheme.
+- O Racket evoluiu a partir da implementação anterior conhecida como "PLT Scheme".
+- Importante notar que o PLT Scheme não foi descontinuado; ele se transformou em uma plataforma mais abrangente chamada Racket.
 
 ## Ambiente de Desenvolvimento para Scheme
 

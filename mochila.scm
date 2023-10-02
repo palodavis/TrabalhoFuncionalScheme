@@ -34,4 +34,5 @@
 (define items-to-choose (list item1 item2 item3 item4))
 
 (display (knapsack-capacity-5 items-to-choose))
+
 (display (knapsack-capacity-10 items-to-choose))
