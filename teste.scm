@@ -1,4 +1,5 @@
 #lang scheme
+
 (define (curry func . args)
   (lambda args2
     (apply func (append args args2))))
@@ -16,12 +17,17 @@
   ))
 
 (define (filtro-cargaHoraria categoria min max)
+  
+  ;;Exemplo de closure
   (for-each
+  ;;lambda faz referência a variável categoria, min, max
    (lambda (item)
      (display (format "Título: ~a, Carga Horária: ~a, Categoria: ~a~%" 
                       (cdr (assoc 'titulo item))
                       (cdr (assoc 'cargaHoraria item))
                       (cdr (assoc 'categoria item)))))
+   
+   ;;High order funtion
    (filter
     (curry
      (lambda (categoria min max item)
