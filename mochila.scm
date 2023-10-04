@@ -5,34 +5,40 @@
 (define item3 '(4 5))
 (define item4 '(5 6))
 
-(define (select-items items select-func)
-  (cond
-    ((null? items) '())
-    ((select-func (car items))
-     (cons (car items) (select-items (cdr items) select-func)))
-    (else (select-items (cdr items) select-func))))
+;;Exemplo de Closure 
+(define (selecionar-itens itens capacidade)
+  (letrec ((aux (lambda (itens capacidade)
+                  (cond
+                    ((null? itens) '())
+                    ((<= (car (car itens)) capacidade)
+                     (let* ((item (car itens))
+                            (resto-itens (cdr itens))
+                            (valor (cadr item))
+                            (peso (car item))
+                            (com-item (cons item (aux resto-itens (- capacidade peso))))
+                            (sem-item (aux resto-itens capacidade)))
+                       (if (> (calcular-valor-total com-item) (calcular-valor-total sem-item))
+                           com-item
+                           sem-item)))
+                    (else (aux (cdr itens) capacidade))))))
+    (aux itens capacidade)))
 
-(define (calculate-total-value selected-items)
-  (let ((total-value 0))
-    (define (helper items)
-      (cond
-        ((null? items) total-value)
-        (else
-         (let ((item (car items)))
-           (set! total-value (+ total-value (cadr item)))
-           (helper (cdr items))))))
-    (helper selected-items)))
+;; Functor ou
+(define (calcular-valor-total itens)
+  (apply + (map cadr itens)))
 
-(define (knapsack capacity)
-  (lambda (items)
-    (let ((selected-items (select-items items (lambda (item) (<= (car item) capacity)))))
-      (list selected-items (calculate-total-value selected-items)))))
+;; Curry
+(define (mochila capacidade)
+  (lambda (itens)
+    (let ((itens-selecionados (selecionar-itens itens capacidade)))
+      (list "Itens selecionados:" itens-selecionados
+            "; Calculo total:" (calcular-valor-total itens-selecionados)))))
 
-(define knapsack-capacity-5 (knapsack 5))
-(define knapsack-capacity-10 (knapsack 10))
+(define mochila-capacidade-10 (mochila 10))
 
-(define items-to-choose (list item1 item2 item3 item4))
+(define itens-para-escolher (list item1 item2 item3 item4))
 
-(display (knapsack-capacity-5 items-to-choose))
-
-(display (knapsack-capacity-10 items-to-choose))
+; Imprime os resultados com textos adicionais
+(display "Resultado:")
+(newline)
+(mochila-capacidade-10 itens-para-escolher)
