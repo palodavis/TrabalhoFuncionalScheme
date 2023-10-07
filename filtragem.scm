@@ -1,8 +1,42 @@
 #lang scheme
 
-(define (curry func . args)
-  (lambda args2
-    (apply func (append args args2))))
+(define (make-curry fn)
+  (lambda args
+    (if (= (length args) (procedure-arity fn))
+        (apply fn args)
+        (make-curry (apply fn args)))))
+
+(define (string-search str substr)
+  ;; Implementação simples de busca de substring
+  (let loop ((i 0) (len (string-length str)))
+    (cond ((>= i len) -1)
+          ((string-prefix? substr (substring str i))
+           i)
+          (else
+           (loop (+ i 1) len)))))
+
+(define (filtro arr tit fcomp cat)
+  (filter
+   (lambda (item)
+     (or (<= (string-length tit) 0)
+         (>= (string-search (cdr (assoc 'titulo item)) tit) 0)))
+   (filter
+    (if (not fcomp)
+        (lambda (_) #t)
+        (lambda (item)
+          (fcomp (cdr (assoc 'cargaHoraria item)))))
+    (filter
+     (lambda (item)
+       (or (<= (string-length cat) 0)
+           (string=? cat (cdr (assoc 'categoria item)))))
+     arr))))
+
+;; Aplicando curry diretamente a filtro
+(define filter1
+  (make-curry filtro))
+
+(define filter2
+  (make-curry filtro))
 
 (define dados
   '(
@@ -16,25 +50,6 @@
     ((titulo . "dsds arte") (cargaHoraria . 30) (categoria . "projeto"))
   ))
 
-(define (filtro-cargaHoraria categoria min max)
-  
-  ;;Exemplo de closure
-  (for-each
-  ;;lambda faz referência a variável categoria, min, max
-   (lambda (item)
-     (display (format "Título: ~a, Carga Horária: ~a, Categoria: ~a~%" 
-                      (cdr (assoc 'titulo item))
-                      (cdr (assoc 'cargaHoraria item))
-                      (cdr (assoc 'categoria item)))))
-   
-   ;;High order funtion
-   (filter
-    (curry
-     (lambda (categoria min max item)
-       (and (string=? (cdr (assoc 'categoria item)) categoria)
-            (>= (cdr (assoc 'cargaHoraria item)) min)
-            (<= (cdr (assoc 'cargaHoraria item)) max)))
-     categoria min max)
-    dados)))
-
-(filtro-cargaHoraria "curso" 20 30)
+(display (filter1 dados "" (lambda (ch) (and (>= ch 20) (<= ch 30))) "curso"))
+(newline)
+(display (filter2 dados "" (lambda (ch) (and (>= ch 20) (<= ch 40))) "projeto"))
